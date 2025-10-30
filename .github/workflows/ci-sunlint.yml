@@ -1,0 +1,58 @@
+name: Sunlint Code Quality Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  sunlint:
+    name: Run Sunlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache npm packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Sunlint
+        run: npm install -g @sun-asterisk/sunlint
+
+      - name: Run Sunlint
+        id: sunlint
+        continue-on-error: true
+        run: sunlint --all --changed-files --fail-on-new-violations --format json > sunlint-report.json
+
+      - name: Upload Sunlint Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunlint-report
+          path: sunlint-report.json
+
+      - name: Comment Sunlint Result
+        if: steps.sunlint.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: '🧹 Sunlint Code Quality Report'
+          message: |
+            Một số lỗi lint **mới** được phát hiện.  
+            Vui lòng kiểm tra và fix trước khi merge 🙏  
+            Chi tiết xem tại [Artifacts → sunlint-report.json].
+
+      - name: Fail if new violations exist
+        if: steps.sunlint.outcome == 'failure'
+        run: exit 1
