@@ -8,6 +8,7 @@ import { DictType } from '@/app/lib/type/dictType';
 import { registerState } from '@/app/lib/type/actionType';
 import { registerAction } from '@/app/actions/auth/registerAction';
 import toast from 'react-hot-toast';
+import { useNavigationLoading } from '@/app/lib/hooks/useNavigationLoading';
 
 interface RegisterFormProps {
   dictionary: DictType;
@@ -18,8 +19,6 @@ export default function RegisterForm({
   dictionary,
   locale,
 }: RegisterFormProps) {
-  const router = useRouter();
-
   const registerDict = dictionary.auth?.register!;
 
   const initialState: registerState = {
@@ -37,13 +36,15 @@ export default function RegisterForm({
     initialState
   );
 
+  const { push } = useNavigationLoading();
+
   useEffect(() => {
     if (
       !state.message &&
       (!state.errors || Object.keys(state.errors).length === 0)
     ) {
       toast.success(registerDict?.successful_registration!);
-      router.push(`/${locale}/dashboard/posts`);
+      push(`/${locale}/dashboard/posts`);
     }
     if (state.message && state.errors && Object.keys(state.errors).length > 0) {
       if (state.errors.name?.length) {
@@ -70,7 +71,7 @@ export default function RegisterForm({
     ) {
       toast.error(registerDict?.server_error ?? state.message);
     }
-  }, [state, router, locale, registerDict]);
+  }, [state, push, locale, registerDict]);
 
   return (
     <div className="w-full max-w-md">

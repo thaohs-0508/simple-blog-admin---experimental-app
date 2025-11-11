@@ -1,7 +1,7 @@
 import { getDictionary } from '@/app/lib/get-dictionary';
 import RenderPostsList from './PostList';
-import { getPostsFromDatabase } from '@/app/lib/data/mock-data';
 import { PostModel } from '@/app/lib/data/models/postModel';
+import { getAllPosts } from '@/app/lib/services/postService';
 
 type Props = {
   params: Promise<{ locale: 'en' | 'vi' }>;
@@ -10,6 +10,6 @@ type Props = {
 export default async function RenderPostsPage({ params }: Props) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
-  const posts: PostModel[] = await getPostsFromDatabase();
+  const posts: PostModel[] = await getAllPosts();
   return <RenderPostsList dict={dict} locale={locale} posts={posts} />;
 }

@@ -1,11 +1,11 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { DictType } from '@/app/lib/type/dictType';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormProps {
   dictionary: DictType;
@@ -13,12 +13,13 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ dictionary, locale }: LoginFormProps) {
-  const router = useRouter();
   const loginDict = dictionary.auth?.login;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -34,16 +35,16 @@ export default function LoginForm({ dictionary, locale }: LoginFormProps) {
       if (result?.error) {
         toast.error(loginDict?.invalidCredentials!);
         setError(loginDict?.invalidCredentials!);
+        setIsLoading(false);
       } else if (result?.ok) {
         toast.success(loginDict?.login_successful!);
-        router.refresh();
         router.push(`/${locale}/dashboard/posts`);
+        router.refresh();
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Login failed';
       toast.error(loginDict?.invalidCredentials!);
       setError(loginDict?.invalidCredentials!);
-    } finally {
       setIsLoading(false);
     }
   };

@@ -3,5 +3,7 @@ export interface PostModel {
   title: string;
   userId: string;
   body: string;
-  image?: string;
+  image?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }

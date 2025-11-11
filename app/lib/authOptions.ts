@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import UserModel from './data/models/userModel';
 import bcrypt from 'bcryptjs';
+import { getUserByEmail } from './services/userService';
 
 declare module 'next-auth' {
   interface Session {
@@ -43,18 +44,15 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_MOCK_URL}/users?email=${credentials.email}`
-        );
-        const users = await res.json();
-        const user = users[0];
+        const user = await getUserByEmail(credentials.email);
+
         if (!user) {
           console.log('Không tìm thấy user');
           return null;
         }
         const isValidPassword = await bcrypt.compare(
           credentials.password,
-          user.password
+          user.password!
         );
         if (!isValidPassword) {
           console.log('Sai mật khẩu');

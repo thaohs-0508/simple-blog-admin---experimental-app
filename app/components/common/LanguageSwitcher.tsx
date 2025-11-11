@@ -1,9 +1,10 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { i18nConfig } from '@/app/lib/i18n-config';
 import { DictType } from '@/app/lib/type/dictType';
+import { useNavigationLoading } from '@/app/lib/hooks/useNavigationLoading';
 
 interface LanguageSwitcherProps {
   dictionary?: DictType;
@@ -12,8 +13,8 @@ interface LanguageSwitcherProps {
 export default function LanguageSwitcher({
   dictionary,
 }: LanguageSwitcherProps) {
-  const router = useRouter();
   const pathname = usePathname();
+  const { push, isPending } = useNavigationLoading();
   const [mounted, setMounted] = useState(false);
   const [currentLocale, setCurrentLocale] = useState('');
 
@@ -24,7 +25,7 @@ export default function LanguageSwitcher({
   }, [pathname]);
 
   const handleChange = (newLocale: string) => {
-    if (currentLocale === newLocale) {
+    if (currentLocale === newLocale || isPending) {
       return;
     }
 
@@ -38,7 +39,7 @@ export default function LanguageSwitcher({
     }
 
     const newPath = '/' + segments.join('/');
-    router.push(newPath);
+    push(newPath);
   };
 
   if (!mounted) {
@@ -54,7 +55,7 @@ export default function LanguageSwitcher({
         <button
           key={`lang-${locale}`}
           onClick={() => handleChange(locale)}
-          disabled={currentLocale === locale}
+          disabled={currentLocale === locale || isPending}
           className={`
             ml-2 
             rounded-md 

@@ -1,5 +1,7 @@
 import SessionProvider from '../components/providers/SessionProvider';
 import { ToastProviders } from '../components/providers/ToastProvider';
+import NavigationLoadingProvider from '../components/providers/NavigationLoadingProvider';
+import NavigationProgressBar from '../components/common/NavigationProgressBar';
 import '../globals.css';
 import { getDictionary } from '../lib/get-dictionary';
 import { getSupportedLocales } from '../lib/i18n-config';
@@ -25,18 +27,21 @@ export default async function RenderLocaleLayout({
   return (
     <html lang={locale}>
       <body>
+        <NavigationProgressBar />
         <SessionProvider>
-          <header className="border-b border-gray-200 bg-white">
-            <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-              <LanguageSwitcher dictionary={dictionary} />
-              <UserProfile locale={locale} dict={dictionary} />
-            </div>
-          </header>
-          <main>
+          <NavigationLoadingProvider>
             <CreateI18nProvider locale={locale} dictionary={dictionary}>
-              <ToastProviders>{children}</ToastProviders>
+              <header className="border-b border-gray-200 bg-white">
+                <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                  <LanguageSwitcher dictionary={dictionary} />
+                  <UserProfile locale={locale} dict={dictionary} />
+                </div>
+              </header>
+              <main>
+                <ToastProviders>{children}</ToastProviders>
+              </main>
             </CreateI18nProvider>
-          </main>
+          </NavigationLoadingProvider>
         </SessionProvider>
       </body>
     </html>

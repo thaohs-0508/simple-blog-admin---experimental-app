@@ -22,6 +22,7 @@ export default function UserProfile({ locale, dict }: UserProfileProps) {
         redirect: false,
       });
       toast.success(dictProfile.logoutSuccess!);
+      setIsOpen(false);
       router.push(`/${locale}/auth/login`);
     } catch (error) {
       toast.error('Logout failed');
