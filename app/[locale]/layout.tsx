@@ -26,17 +26,17 @@ export default async function RenderLocaleLayout({
     <html lang={locale}>
       <body>
         <SessionProvider>
-          <header className="border-b border-gray-200 bg-white">
-            <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-              <LanguageSwitcher dictionary={dictionary} />
-              <UserProfile locale={locale} dict={dictionary} />
-            </div>
-          </header>
-          <main>
-            <CreateI18nProvider locale={locale} dictionary={dictionary}>
+          <CreateI18nProvider locale={locale} dictionary={dictionary}>
+            <header className="border-b border-gray-200 bg-white">
+              <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                <LanguageSwitcher dictionary={dictionary} />
+                <UserProfile locale={locale} dict={dictionary} />
+              </div>
+            </header>
+            <main>
               <ToastProviders>{children}</ToastProviders>
-            </CreateI18nProvider>
-          </main>
+            </main>
+          </CreateI18nProvider>
         </SessionProvider>
       </body>
     </html>

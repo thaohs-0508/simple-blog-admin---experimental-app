@@ -1,18 +1,22 @@
-import { addPostToDatabase } from '@/app/lib/data/mock-data';
+'use server';
+
+import { addPost } from '@/app/lib/services/postService';
 import { UpdateAndAddState } from '@/app/lib/type/actionType';
 import z from 'zod';
 
 const AddPostSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   body: z.string().min(1, 'Body is required'),
+  userId: z.string().optional(),
 });
 export async function addAction(
   prevState: UpdateAndAddState,
   formData: FormData
-) {
+): Promise<UpdateAndAddState> {
   const rawData = {
     title: formData.get('title'),
     body: formData.get('body'),
+    userId: formData.get('userId'),
   };
   const validationResult = AddPostSchema.safeParse(rawData);
 
@@ -23,11 +27,8 @@ export async function addAction(
     };
   }
   try {
-    const { title, body } = validationResult.data;
-    await addPostToDatabase({
-      title,
-      body,
-    });
+    const { title, body, userId } = validationResult.data;
+    await addPost(title, body, String(userId));
     return {
       message: '',
       errors: {},

@@ -1,17 +1,19 @@
 'use server';
 
 import z from 'zod';
-import { updatePostInDatabase } from '../../lib/data/mock-data';
 import { UpdateAndAddState } from '../../lib/type/actionType';
+import { updatePost } from '@/app/lib/services/postService';
+
 const UpdatePostSchema = z.object({
   id: z.string().min(1, 'Post ID is required'),
   title: z.string().min(1, 'Title is required'),
   body: z.string().min(1, 'Body is required'),
 });
+
 export async function updatePostAction(
   prevState: UpdateAndAddState,
   formData: FormData
-) {
+): Promise<UpdateAndAddState> {
   const rawData = {
     id: formData.get('id') as string,
     title: formData.get('title'),
@@ -27,10 +29,7 @@ export async function updatePostAction(
   }
   try {
     const { id, title, body } = validationResult.data;
-    await updatePostInDatabase(id, {
-      title,
-      body,
-    });
+    await updatePost(id, { title, body });
     return {
       message: '',
       errors: {},

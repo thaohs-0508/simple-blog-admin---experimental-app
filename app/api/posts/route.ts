@@ -1,11 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
-import {
-  getPostByIdFromDatabase,
-  getPostsFromDatabase,
-} from '@/app/lib/data/mock-data';
 import { HTTP_STATUS } from '@/app/lib/constants';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/authOptions';
+import { getAllPosts, getPostById } from '@/app/lib/services/postService';
 
 const CONTENT_TYPE_JSON = 'application/json';
 
@@ -42,7 +39,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         );
       }
 
-      const post = await getPostByIdFromDatabase(postId);
+      const post = await getPostById(postId);
       if (!post) {
         return NextResponse.json(
           { error: 'Post not found' },
@@ -52,7 +49,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(post);
     }
 
-    const posts = await getPostsFromDatabase();
+    const posts = await getAllPosts();
     return NextResponse.json(posts);
   } catch (error) {
     console.error('Failed to fetch posts:', {

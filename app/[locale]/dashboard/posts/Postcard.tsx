@@ -12,7 +12,7 @@ interface PostCardProps {
   userId: string;
   locale: string;
   dict: DictType;
-  image?: string;
+  image?: string | null;
 }
 const DEFAULT_IMAGE = '/images/default_image.png';
 export default function RenderPostCard({

@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_URL") 
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+}
+
+// User model for authentication and authorization
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  password  String?
+  role      String     @default("user") // 'admin' or 'user'
+  image     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  posts     Post[]     @relation("UserPosts")
+
+  @@map("users")
+}
+
+// Post model for blog posts
+model Post {
+  id        String     @id @default(cuid())
+  title     String
+  body      String
+  image     String?
+  userId    String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  user      User       @relation("UserPosts", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("posts")
+}
+

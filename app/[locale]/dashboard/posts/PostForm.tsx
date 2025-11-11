@@ -4,11 +4,12 @@ import RenderPostFormInput from './PostFormInput';
 import { useRouter } from 'next/navigation';
 import { DictType } from '@/app/lib/type/dictType';
 import toast from 'react-hot-toast';
-import { useActionState, useEffect, useState } from 'react';
+import { use, useActionState, useEffect, useState } from 'react';
 import { updatePostAction } from '@/app/actions/posts/putAction';
 import { addAction } from '@/app/actions/posts/addAction';
 import { UpdateAndAddState } from '@/app/lib/type/actionType';
 import { error } from 'console';
+import { useSession } from 'next-auth/react';
 
 interface PostFormProps {
   postId?: string | undefined;
@@ -25,7 +26,7 @@ export default function PostForm({
 }: PostFormProps) {
   const router = useRouter();
   const postDict = dict?.dashboard?.posts;
-
+  const session = useSession();
   const [formData, setFormData] = useState({
     title: postCard?.title || '',
     body: postCard?.body || '',
@@ -41,25 +42,33 @@ export default function PostForm({
     }));
   };
 
-  const initialState = postId
-    ? {
-        message: '',
-        errors: {
-          title: [],
-          body: [],
-          id: [],
-        },
-      }
-    : {
-        message: '',
-        errors: {
-          title: [],
-          body: [],
-        },
-      };
-  const [state, formAction, isPending] = postId
-    ? useActionState(updatePostAction, initialState)
-    : useActionState(addAction, initialState);
+  const initialState: UpdateAndAddState = {
+    message: '',
+    errors: {
+      title: [],
+      body: [],
+    },
+  };
+
+  const handleAction = async (
+    prevState: UpdateAndAddState | undefined,
+    formData: FormData
+  ): Promise<UpdateAndAddState> => {
+    const state = prevState || initialState;
+    if (postId) {
+      formData.set('id', postId);
+      const result = await updatePostAction(state, formData);
+      return result || initialState;
+    } else {
+      const result = await addAction(state, formData);
+      return result || initialState;
+    }
+  };
+
+  const [state, formAction, isPending] = useActionState(
+    handleAction,
+    initialState
+  ) as [UpdateAndAddState, (payload: FormData) => void, boolean];
 
   const handleFormSubmit = async (fd: FormData) => {
     fd.set('title', formData.title);
@@ -74,12 +83,14 @@ export default function PostForm({
     if (!state.message && (!state.errors || !hasErrors)) {
       if (!postId) {
         toast.success(
-          postDict?.successMessages?.createSuccess ?? state.message
+          postDict?.successMessages?.createSuccess ||
+            'Post created successfully'
         );
         router.push(`/${locale}/dashboard/posts`);
       } else {
         toast.success(
-          postDict?.successMessages?.updateSuccess ?? state.message
+          postDict?.successMessages?.updateSuccess ||
+            'Post updated successfully'
         );
         router.push(`/${locale}/dashboard/posts/${postId}`);
       }
@@ -117,6 +128,14 @@ export default function PostForm({
             name="title"
             required
             errors={state.errors?.title}
+          />
+
+          <RenderPostFormInput
+            name="userId"
+            value={session.data?.user?.id || ''}
+            onChange={() => {}}
+            type="hidden"
+            label={''}
           />
 
           <RenderPostFormInput
