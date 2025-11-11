@@ -33,5 +33,79 @@
       "title": "chao ban",
       "body": "minh la thao dep  trai"
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Leanne Graham",
+      "email": "leanne@example.com",
+      "password": "123456",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Ervin Howell",
+      "email": "ervin@example.com",
+      "password": "123456",
+      "role": "editor"
+    },
+    {
+      "id": "3",
+      "name": "Clementine Bauch",
+      "email": "clementine@example.com",
+      "password": "123456",
+      "role": "viewer"
+    },
+    {
+      "id": "4",
+      "name": "Thao Nguyen",
+      "email": "thao@example.com",
+      "password": "123456",
+      "role": "admin"
+    },
+    {
+      "id": "8ab3",
+      "email": "alice@example.com",
+      "password": "hacked1234"
+    },
+    {
+      "id": "c417",
+      "email": "alice@example.com",
+      "password": "hacked1234"
+    },
+    {
+      "id": "0987",
+      "email": "alice@example.com",
+      "password": "hacked1234"
+    },
+    {
+      "id": "bce5",
+      "email": "alice@example.com",
+      "password": "hacked1234"
+    },
+    {
+      "id": "77cc",
+      "email": "alice@example.com",
+      "password": "hacked1234"
+    },
+    {
+      "id": "614f",
+      "email": "alice@example.com",
+      "password": "hacked1234"
+    },
+    {
+      "id": "32f7",
+      "name": "Hồ Sỹ Thảo",
+      "email": "thao@gmail.com",
+      "password": "$2b$10$JyzTNhXD6O3AE6FhmAAAw.NM0fjYWDNnA5NxLxCxXSrVxkjR/5X4W",
+      "role": "user"
+    },
+    {
+      "id": "a9a7",
+      "name": "Hồ Sỹ Thảo",
+      "email": "thao@gmail.com",
+      "password": "$2b$10$D2sLNDDhnGo5czXd0/a9TuMPpa2Zsh8612lhNJ5MarJwvMazOF19y",
+      "role": "user"
+    }
   ]
 }

@@ -11,6 +11,7 @@
     "S019": "error",
     "S022": "error",
     "S030": "warn",
+    "S037": "warn",
 
     "T016": "error",
     "T017": "warn",

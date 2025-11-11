@@ -1,4 +1,7 @@
 import { PostModel } from './models/postModel';
+import UserModel from './models/userModel';
+import { mapToUserModel } from './mappers/userMapper';
+
 const API_MOCK_URL =
   process.env.NEXT_PUBLIC_API_MOCK_URL || 'http://localhost:3001';
 export async function getPostsFromDatabase(): Promise<Array<PostModel>> {

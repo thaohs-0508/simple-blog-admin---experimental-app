@@ -1,0 +1,7 @@
+{
+  "nameRequired": "NAME_REQUIRED",
+  "emailNotValid": "EMAIL_NOT_VALID",
+  "passwordTooShort": "PASSWORD_TOO_SHORT",
+  "confirmPasswordTooShort": "CONFIRM_PASSWORD_TOO_SHORT",
+  "passwordsDoNotMatch": "PASSWORDS_DO_NOT_MATCH"
+}

@@ -4,21 +4,38 @@ import {
   getPostsFromDatabase,
 } from '@/app/lib/data/mock-data';
 import { HTTP_STATUS } from '@/app/lib/constants';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/lib/authOptions';
 
 const CONTENT_TYPE_JSON = 'application/json';
+
+const cacheHeaders = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+  Pragma: 'no-cache',
+  Expires: '0',
+};
 
 function validateContentType(request: NextRequest): boolean {
   const contentType = request.headers.get('content-type');
   return !contentType || contentType.includes(CONTENT_TYPE_JSON);
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+function setCache(data: unknown, status = 200): NextResponse {
+  return NextResponse.json(data, { status, headers: cacheHeaders });
+}
+
+async function checkPostsAuth(request: NextRequest): Promise<NextResponse> {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return setCache({ error: 'Unauthorized' }, HTTP_STATUS.UNAUTHORIZED);
+  }
   try {
     // Validate content type early
     if (!validateContentType(request)) {
-      return NextResponse.json(
+      return setCache(
         { error: 'Invalid Content-Type header' },
-        { status: HTTP_STATUS.BAD_REQUEST }
+        HTTP_STATUS.BAD_REQUEST
       );
     }
 
@@ -27,31 +44,29 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (postId) {
       if (typeof postId !== 'string' || postId.trim().length === 0) {
-        return NextResponse.json(
-          { error: 'Invalid post ID' },
-          { status: HTTP_STATUS.BAD_REQUEST }
-        );
+        return setCache({ error: 'Invalid post ID' }, HTTP_STATUS.BAD_REQUEST);
       }
 
       const post = await getPostByIdFromDatabase(postId);
       if (!post) {
-        return NextResponse.json(
-          { error: 'Post not found' },
-          { status: HTTP_STATUS.NOT_FOUND }
-        );
+        return setCache({ error: 'Post not found' }, HTTP_STATUS.NOT_FOUND);
       }
-      return NextResponse.json(post);
+      return setCache(post);
     }
 
     const posts = await getPostsFromDatabase();
-    return NextResponse.json(posts);
+    return setCache(posts);
   } catch (error) {
     console.error('Failed to fetch posts:', {
       error: error instanceof Error ? error.message : String(error),
     });
-    return NextResponse.json(
+    return setCache(
       { error: 'Failed to fetch posts' },
-      { status: HTTP_STATUS.SERVER_ERROR }
+      HTTP_STATUS.SERVER_ERROR
     );
   }
+}
+
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  return checkPostsAuth(request);
 }

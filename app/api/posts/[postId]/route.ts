@@ -4,6 +4,8 @@ import {
 } from '@/app/lib/data/mock-data';
 import { NextResponse, NextRequest } from 'next/server';
 import { HTTP_STATUS } from '@/app/lib/constants';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/lib/authOptions';
 
 function validateContentType(request: NextRequest): boolean {
   const contentType = request.headers.get('content-type');
@@ -14,19 +16,22 @@ function validateContentType(request: NextRequest): boolean {
   );
 }
 
+function validateSession(): boolean {
+  const session = getServerSession(authOptions);
+  return !!session;
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ postId: string }> }
 ): Promise<NextResponse> {
   try {
-    // Validate content type early
-    if (!validateContentType(request)) {
+    if (!validateSession()) {
       return NextResponse.json(
-        { error: 'Invalid Content-Type header' },
-        { status: HTTP_STATUS.BAD_REQUEST }
+        { error: 'Unauthorized' },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
-
     const { postId } = await params;
     const post = await getPostByIdFromDatabase(postId);
     if (!post) {
@@ -56,6 +61,13 @@ export async function DELETE(
       return NextResponse.json(
         { error: 'Invalid Content-Type header' },
         { status: HTTP_STATUS.BAD_REQUEST }
+      );
+    }
+
+    if (!validateSession()) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: HTTP_STATUS.UNAUTHORIZED }
       );
     }
 

@@ -1,7 +1,9 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
 const supportedLocales = ['en', 'vi'];
-export function validateContentType(request: NextRequest): boolean {
+
+function validateContentType(request: NextRequest): boolean {
   const contentType = request.headers.get('content-type');
   return (
     !contentType ||
@@ -24,9 +26,19 @@ function getPreferredLocale(request: NextRequest): string {
   }
   return 'en';
 }
-export function redirectLocale(request: NextRequest): NextResponse | undefined {
+
+const protectedPaths = ['/dashboard/posts'];
+const loginPath = '/auth/login';
+
+export async function validateRequest(request: NextRequest) {
+  return validateLocaleAndAuth(request);
+}
+
+async function validateLocaleAndAuth(
+  request: NextRequest
+): Promise<NextResponse> {
   if (request.headers.has('next-action')) {
-    return undefined;
+    return NextResponse.next();
   }
   if (!validateContentType(request)) {
     return NextResponse.json(
@@ -41,21 +53,48 @@ export function redirectLocale(request: NextRequest): NextResponse | undefined {
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (isLocaleInPathname) {
-    return undefined;
-  }
-
   const preferredLocale = getPreferredLocale(request);
 
-  request.nextUrl.pathname = `/${preferredLocale}${pathname}`;
+  if (!isLocaleInPathname) {
+    request.nextUrl.pathname = `/${preferredLocale}${pathname}`;
+    return NextResponse.redirect(request.nextUrl);
+  }
+  const currentLocale = pathname.split('/')[1];
+  const pathnameWithoutLocale =
+    pathname.replace(`/${currentLocale}`, '') || '/';
 
-  return NextResponse.redirect(request.nextUrl);
+  // Get authentication token
+  const token = await getToken({ req: request });
+
+  const isProtected = protectedPaths.some((path) =>
+    pathnameWithoutLocale.startsWith(path)
+  );
+  const isLoginPage = pathnameWithoutLocale === loginPath;
+
+  if (isLoginPage && token) {
+    return NextResponse.redirect(
+      new URL(`/${currentLocale}/dashboard/posts`, request.url)
+    );
+  }
+
+  if (isProtected) {
+    if (!token) {
+      const callbackUrl = encodeURIComponent(request.url);
+      return NextResponse.redirect(
+        new URL(
+          `/${currentLocale}${loginPath}?callbackUrl=${callbackUrl}`,
+          request.url
+        )
+      );
+    }
+  }
+
+  return NextResponse.next();
 }
-
 export const config = {
   matcher: [
     '/((?!api|__NEXT_ACTIONS__|_next/static|_next/image|favicon.ico).*)',
   ],
 };
 
-export { redirectLocale as proxy };
+export { validateRequest as proxy };

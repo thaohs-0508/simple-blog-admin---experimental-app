@@ -49,5 +49,62 @@
   },
   "common": {
     "back": "Quay lại"
+  },
+  "auth": {
+    "login": {
+      "title": "Đăng nhập",
+      "subtitle": "Đăng nhập vào tài khoản của bạn",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "rememberMe": "Ghi nhớ tôi",
+      "signIn": "Đăng nhập",
+      "googleSignIn": "Đăng nhập bằng Google",
+      "noAccount": "Chưa có tài khoản?",
+      "register": "Đăng ký tại đây",
+      "invalidCredentials": "Email hoặc mật khẩu không hợp lệ",
+      "signingIn": "Đang đăng nhập...",
+      "invalid_email": "Email không hợp lệ",
+      "password_too_short": "Mật khẩu phải có ít nhất 6 ký tự",
+      "login_successful": "Đăng nhập thành công",
+      "validation_failed": "Xác thực thất bại",
+      "server_error": "Có lỗi xảy ra trên máy chủ",
+      "email_invalid": "Vui lòng nhập địa chỉ email hợp lệ",
+      "password_invalid": "Mật khẩu phải có ít nhất 6 ký tự"
+    },
+    "register": {
+      "title": "Tạo Tài Khoản",
+      "subtitle": "Đăng ký để bắt đầu",
+      "fullName": "Họ và Tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "confirmPassword": "Xác nhận Mật khẩu",
+      "signUp": "Đăng ký",
+      "googleSignUp": "Đăng ký bằng Google",
+      "haveAccount": "Đã có tài khoản?",
+      "login": "Đăng nhập tại đây",
+      "passwordMismatch": "Mật khẩu không khớp",
+      "emailExists": "Email đã tồn tại",
+      "registrationFailed": "Đăng ký thất bại",
+      "signingUp": "Đang đăng ký...",
+      "successMessage": "Tài khoản đã được tạo thành công! Vui lòng đăng nhập.",
+      "successful_registration": "Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...",
+      "name_too_short": "Tên phải có ít nhất 2 ký tự",
+      "email_invalid": "Địa chỉ email không hợp lệ",
+      "password_too_short": "Mật khẩu phải có ít nhất 6 ký tự",
+      "confirm_password_too_short": "Vui lòng xác nhận mật khẩu của bạn",
+      "errors": {
+        "name_required": "Tên là bắt buộc",
+        "email_not_valid": "Email không hợp lệ",
+        "password_too_short": "Mật khẩu quá ngắn",
+        "confirm_password_too_short": "Xác nhận mật khẩu quá ngắn",
+        "passwords_do_not_match": "Mật khẩu không khớp",
+        "email_already_exists": "Email đã tồn tại"
+      }
+    }
+  },
+  "useProfile": {
+    "role": "Vai trò",
+    "logout": "Đăng xuất",
+    "logoutSuccess": "Đã đăng xuất thành công!"
   }
 }

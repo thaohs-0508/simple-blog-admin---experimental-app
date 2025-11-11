@@ -1,3 +1,4 @@
+'use server';
 import { addPostToDatabase } from '@/app/lib/data/mock-data';
 import { UpdateAndAddState } from '@/app/lib/type/actionType';
 import z from 'zod';

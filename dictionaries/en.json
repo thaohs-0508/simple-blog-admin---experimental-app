@@ -49,5 +49,63 @@
   },
   "common": {
     "back": "Back"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Sign in to your account",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "signIn": "Sign In",
+      "googleSignIn": "Sign in with Google",
+      "noAccount": "Don't have an account?",
+      "register": "Register here",
+      "invalidCredentials": "Invalid email or password",
+      "signingIn": "Signing in...",
+      "invalid_email": "Invalid email",
+      "password_too_short": "Password must be at least 6 characters",
+      "login_successful": "Login successful",
+      "validation_failed": "Validation failed",
+      "server_error": "Server error occurred",
+      "email_invalid": "Please enter a valid email address",
+      "password_invalid": "Password must be at least 6 characters"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Sign up to get started",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "signUp": "Sign Up",
+      "googleSignUp": "Sign up with Google",
+      "haveAccount": "Already have an account?",
+      "login": "Login here",
+      "passwordMismatch": "Passwords do not match",
+      "emailExists": "Email already exists",
+      "registrationFailed": "Registration failed",
+      "signingUp": "Signing up...",
+      "successMessage": "Account created successfully! Please login.",
+      "successful_registration": "Registration successful! Redirecting to login...",
+      "name_too_short": "Name must be at least 2 characters",
+      "email_invalid": "Invalid email address",
+      "password_too_short": "Password must be at least 6 characters",
+      "confirm_password_too_short": "Please confirm your password",
+      "server_error": "Server error occurred",
+      "errors": {
+        "name_required": "Name is required",
+        "email_not_valid": "Email is not valid",
+        "password_too_short": "Password is too short",
+        "confirm_password_too_short": "Confirm password is too short",
+        "passwords_do_not_match": "Passwords do not match",
+        "email_already_exists": "Email already exists"
+      }
+    }
+  },
+  "useProfile": {
+    "role": "Role",
+    "logout": "Logout",
+    "logoutSuccess": "Logged out successfully!"
   }
 }

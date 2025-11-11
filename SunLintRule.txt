@@ -1,0 +1,60 @@
+C042 Tên biến boolean nên bắt đầu bằng is, has, should
+Chi tiết
+Mục tiêu
+Đảm bảo tính rõ ràng và dễ hiểu khi đọc code, giúp người đọc dễ dàng nhận biết biến boolean và mục đích sử dụng của nó. Việc đặt tên biến boolean theo quy tắc này giúp code tự tài liệu hóa và dễ bảo trì hơn.
+
+Chi tiết
+• Sử dụng is cho các thuộc tính trạng thái (ví dụ: isActive, isEnabled)
+• Sử dụng has cho các thuộc tính sở hữu (ví dụ: hasPermission, hasChildren)
+• Sử dụng should cho các thuộc tính quyết định hành động (ví dụ: shouldUpdate, shouldRetry)
+• Tránh sử dụng các tiền tố khác như can, will, does để đảm bảo tính nhất quán
+• Đảm bảo tên biến phản ánh đúng ý nghĩa của giá trị boolean
+
+
+S037 Cấu hình đầy đủ header chống cache để ngăn rò rỉ dữ liệu nhạy cảm
+Chi tiết
+Mục tiêu
+Ngăn trình duyệt lưu vào bộ nhớ tạm thời các nội dung chứa thông tin nhạy cảm như token, form dữ liệu cá nhân, thông tin tài chính, v.v. từ đó tránh rò rỉ khi người dùng dùng chung thiết bị hoặc sử dụng nút "Back"/"Forward".
+
+Chi tiết
+• Các trình duyệt hiện đại có thể lưu cache:
+• HTML của form đã điền
+• Kết quả sau khi đăng nhập
+• Token hoặc thông tin nhạy cảm được render
+• Cách bảo vệ:
+• Cấu hình đồng thời các header:
+• Cache-Control: no-store, no-cache, must-revalidate
+• Pragma: no-cache
+• Expires: 0
+• Áp dụng cho các response chứa dữ liệu bảo mật như:
+• Kết quả tra cứu hồ sơ, đơn hàng
+• Dashboard, thông tin người dùng
+• Token hoặc session page
+• Nên kiểm tra bằng DevTools → Network → Headers.
+
+
+C006
+Tên hàm phải là động từ/verb-noun
+Chi tiết
+Mục tiêu
+Diễn đạt rõ mục đích của hành động, làm code self-documenting.
+
+Chi tiết
+•Tên hàm không được mơ hồ kiểu doSomething()
+•Sử dụng động từ mô tả hành động cụ thể
+•Boolean functions nên bắt đầu với is/has/can/should
+•Tránh tên hàm generic không mang thông tin
+•Động từ được chấp nhận (danh sách tham khảo):
+•Getters/Queries: get, fetch, retrieve, find, search, query, load
+•Setters/Modifiers: set, update, modify, change, edit, alter, transform
+•Creation: create, build, make, generate, construct, produce
+•Deletion: delete, remove, destroy, clean, clear, reset
+•Validation: validate, verify, check, confirm, ensure, test, compare
+•Computation: calculate, compute, parse, format, convert
+•Communication: send, receive, transmit, broadcast, emit, publish
+•Collections: map, filter, sort, group, merge, split, add, append, insert
+•State checks: is, has, can, should, will, does
+•UI actions: show, hide, display, render, draw, toggle, enable, disable
+•Lifecycle: connect, disconnect, open, close, start, stop, run, refresh
+•Event Handling: on, trigger, fire, dispatch, invoke, call
+•Monitoring: count, measure, monitor, watch, track, observe
