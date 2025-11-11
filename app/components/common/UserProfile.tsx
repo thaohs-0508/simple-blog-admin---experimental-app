@@ -1,5 +1,6 @@
 'use client';
 
+import { useNavigationLoading } from '@/app/lib/hooks/useNavigationLoading';
 import { DictType } from '@/app/lib/type/dictType';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +17,7 @@ export default function UserProfile({ locale, dict }: UserProfileProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dictProfile = dict.useProfile!;
+  const { push } = useNavigationLoading();
   const handleLogout = async () => {
     try {
       await signOut({

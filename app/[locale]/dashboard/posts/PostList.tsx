@@ -5,6 +5,7 @@ import RenderPostCard from './Postcard';
 import { PostModel } from '@/app/lib/data/models/postModel';
 import { DictType } from '@/app/lib/type/dictType';
 import { POST_LIST_CONTENT } from '@/app/lib/constants';
+import { useNavigationLoading } from '@/app/lib/hooks/useNavigationLoading';
 
 export default function RenderPostsList({
   dict,
@@ -15,6 +16,7 @@ export default function RenderPostsList({
   locale: string;
   posts: PostModel[];
 }) {
+  const { push } = useNavigationLoading();
   return (
     <div className="max-w-6xl mx-auto py-12 px-4">
       <div className="text-center mb-12">
@@ -27,12 +29,12 @@ export default function RenderPostsList({
       </div>
 
       <div className="flex justify-end mb-6">
-        <Link
-          href={`/${locale}/dashboard/posts/add`}
+        <button
+          onClick={() => push(`/${locale}/dashboard/posts/add`)}
           className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded shadow hover:bg-blue-700 dark:hover:bg-blue-600 transition"
         >
           {dict.dashboard?.posts?.addPost || POST_LIST_CONTENT.ADD_POST}
-        </Link>
+        </button>
       </div>
 
       <article className="mt-12 grid gap-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1">

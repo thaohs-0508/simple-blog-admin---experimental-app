@@ -24,7 +24,6 @@ export default function LoginForm({ dictionary, locale }: LoginFormProps) {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
     try {
       const result = await signIn('credentials', {
         redirect: false,
@@ -35,7 +34,6 @@ export default function LoginForm({ dictionary, locale }: LoginFormProps) {
       if (result?.error) {
         toast.error(loginDict?.invalidCredentials!);
         setError(loginDict?.invalidCredentials!);
-        setIsLoading(false);
       } else if (result?.ok) {
         toast.success(loginDict?.login_successful!);
         router.push(`/${locale}/dashboard/posts`);
@@ -45,6 +43,7 @@ export default function LoginForm({ dictionary, locale }: LoginFormProps) {
       const errorMsg = err instanceof Error ? err.message : 'Login failed';
       toast.error(loginDict?.invalidCredentials!);
       setError(loginDict?.invalidCredentials!);
+    } finally {
       setIsLoading(false);
     }
   };

@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import z from 'zod';
 import { UpdateAndAddState } from '../../lib/type/actionType';
 import { updatePost } from '@/app/lib/services/postService';
@@ -30,6 +31,10 @@ export async function updatePostAction(
   try {
     const { id, title, body } = validationResult.data;
     await updatePost(id, { title, body });
+
+    // Revalidate the posts list and detail page
+    revalidatePath('/dashboard', 'layout');
+
     return {
       message: '',
       errors: {},

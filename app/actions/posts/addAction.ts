@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { addPost } from '@/app/lib/services/postService';
 import { UpdateAndAddState } from '@/app/lib/type/actionType';
 import z from 'zod';
@@ -29,6 +30,9 @@ export async function addAction(
   try {
     const { title, body, userId } = validationResult.data;
     await addPost(title, body, String(userId));
+
+    revalidatePath('/dashboard', 'layout');
+
     return {
       message: '',
       errors: {},
